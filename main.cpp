@@ -3,14 +3,14 @@
 #include <utility>
 
 
+const size_t TEST_DIST = 400 /// constant for minimal available instance
+int TEST_STEPS = 512; /// constant of maximum number of steps
 
-#define DIST 200
-const size_t TEST_DIST = DIST * DIST;
-int TEST_STEPS = 512;
-
-uint8_t* red = NULL;
-uint8_t* green = NULL;
-uint8_t* blue = NULL;
+uint8_t* red = NULL; /// constant for defining the array for Red segment of RGB colors
+uint8_t* green = NULL; /// constant for defining the array for Green segment of RGB
+colors
+uint8_t* blue = NULL; /// constant for defining the array for Blue segment of RGB
+colors
 
 #define MIN_X -2.1
 #define MAX_X 0.67
@@ -19,29 +19,34 @@ uint8_t* blue = NULL;
 
 #define MOVE_PRECISION 10
 
-//#define FULLSCREEN
-
 #define WIDTH 1000
 #define HEIGHT 600
 
-SDL_Window* gWindow;
-SDL_Renderer* gRenderer;
-SDL_Texture* gScreen;
-SDL_Texture* gTemp;
+SDL_Window* gWindow; /// SDL2 Window
+SDL_Renderer* gRenderer; /// SDL2 Renderer
+SDL_Texture* gScreen; /// SDL2 texture for Screen
+SDL_Texture* gTemp; /// SDL2 Temporary Texture
 
+/// Class that defines a double part of the Mandelbrot fractal
 
 class DoubleSelection{
     public:
-    DoubleSelection(DoubleSelection& other) = default;
-    DoubleSelection() = default;
+    DoubleSelection(DoubleSelection& other) = default; /// copy constructor
+    DoubleSelection() = default; /// default constructor
     DoubleSelection(const double minX,
                     const double minY,
                     const double maxX,
                     const double maxY): minPoint(std::make_pair(minX, minY)),
-                                        maxPoint(std::make_pair(maxX, maxY)) { }
+                                        maxPoint(std::make_pair(maxX, maxY)) { } /// constructor of minimal and maximum point of the selection
     
-    ~DoubleSelection()=default;
+    ~DoubleSelection()=default; /// default destructor
 
+//! += operator with another point
+/*!
++= operator for another point represented by min and max value
+
+@param val value of mininum and maximum coordinates of the point
+*/
     DoubleSelection& operator += (const std::pair<std::pair<double, double>,
                                                 std::pair<double, double> > &value){
         minPoint.first += value.first.first;
@@ -53,6 +58,13 @@ class DoubleSelection{
         return *this;
     }
 
+
+//! -= operator with another point
+/*!
+-= operator for another point represented by min and max value
+
+@param val value of mininum and maximum coordinates of the point
+*/
     DoubleSelection& operator -= (const std::pair<std::pair<double, double>,
                                                 std::pair<double, double> > &value){
         minPoint.first -= value.first.first;
@@ -99,6 +111,7 @@ class DoubleSelection{
         std::pair<double, double> maxPoint;
 };
 
+/// Selection of integers within a Mandelbrot fractal
 class IntSelection{
     public:
         IntSelection(IntSelection& other) = default;
@@ -142,6 +155,8 @@ class IntSelection{
         std::pair<int, int> maxPoint;
 };
 
+
+/// Class that represents a complex number
 class Complex{
     public:
         Complex(double _real=0, double _imaginary=0):real(_real), imaginary(_imaginary) {}
